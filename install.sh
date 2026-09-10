@@ -155,6 +155,7 @@ require_data_file plasma/desktoptheme/klassy-light/metadata.json
 require_data_file plasma/desktoptheme/klassy-dark/metadata.json
 require_data_file kstyle/themes/klassy.themerc
 require_data_file plasma/layout-templates/org.kde.klassy.plasma.desktop.bottomPanel/metadata.json
+require_data_file plasma/plasmoids/AndromedaLauncher/metadata.json
 require_data_file icons/Qogir-Light/index.theme
 require_data_file icons/Qogir-Dark/index.theme
 require_klassy_decoration
