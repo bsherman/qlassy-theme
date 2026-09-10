@@ -1,0 +1,16 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "benjamin@holyarmy.org",
+                "Name": "Benjamin Sherman"
+            }
+        ],
+        "Description": "Klassy Dark with Qogir Dark icons and a bottom panel",
+        "Id": "dev.bsherman.qlassy.dark",
+        "License": "LGPL-2.1-or-later",
+        "Name": "Qlassy Dark"
+    },
+    "X-Plasma-APIVersion": "2"
+}
