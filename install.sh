@@ -13,14 +13,26 @@ readonly CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 readonly MARKER_FILE="$CONFIG_HOME/qlassy-theme/defenestrated-11-applied"
 
 apply_preset=false
+activate_variant=""
 
 usage() {
-    printf 'Usage: %s [--apply-preset]\n' "${0##*/}"
+    printf 'Usage: %s [--apply-preset] [--activate light|dark]\n' "${0##*/}"
 }
 
 while (($#)); do
     case "$1" in
         --apply-preset) apply_preset=true ;;
+        --activate)
+            if (($# < 2)); then
+                usage >&2
+                exit 2
+            fi
+            case "$2" in
+                light|dark) activate_variant="$2" ;;
+                *) usage >&2; exit 2 ;;
+            esac
+            shift
+            ;;
         -h|--help) usage; exit 0 ;;
         *) usage >&2; exit 2 ;;
     esac
@@ -107,6 +119,14 @@ copy_previews() {
     cp --remove-destination "$fullscreen_file" "$target_dir/fullscreenpreview.jpg"
 }
 
+activate_theme() {
+    local id="dev.bsherman.qlassy.$1"
+
+    kwriteconfig6 --group KDE --key DefaultLightLookAndFeel --notify dev.bsherman.qlassy.light
+    kwriteconfig6 --group KDE --key DefaultDarkLookAndFeel --notify dev.bsherman.qlassy.dark
+    plasma-apply-lookandfeel --keep-auto --apply "$id"
+}
+
 verify_preset() {
     local config_file="$CONFIG_HOME/klassy/klassyrc"
     [[ "$(kreadconfig6 --file "$config_file" --group Windeco --key ColorizeWindowOutlineWithButton --default true)" == "false" ]] \
@@ -163,6 +183,10 @@ apply_klassy_preset() {
 require_command kpackagetool6
 require_command klassy-settings
 require_command kreadconfig6
+if [[ -n "$activate_variant" ]]; then
+    require_command kwriteconfig6
+    require_command plasma-apply-lookandfeel
+fi
 require_data_file color-schemes/KlassyLight.colors
 require_data_file color-schemes/KlassyDark.colors
 require_data_file plasma/desktoptheme/klassy-light/metadata.json
@@ -186,4 +210,9 @@ if [[ "$apply_preset" == true || ! -f "$MARKER_FILE" ]]; then
     apply_klassy_preset
 fi
 
-printf 'Installed Qlassy Light and Qlassy Dark. No theme was activated.\n'
+if [[ -n "$activate_variant" ]]; then
+    activate_theme "$activate_variant"
+    printf 'Installed and activated Qlassy %s.\n' "${activate_variant^}"
+else
+    printf 'Installed Qlassy Light and Qlassy Dark. No theme was activated.\n'
+fi

@@ -35,6 +35,15 @@ Later runs preserve your Klassy customization. To deliberately restore the Qlass
 ./install.sh --apply-preset
 ```
 
+To install, configure the Qlassy light and dark day/night theme choices, and immediately activate one variant, run one of:
+
+```bash
+./install.sh --activate light
+./install.sh --activate dark
+```
+
+`--activate` configures Plasma's automatic switching on/off setting. If automatic switching is enabled, Plasma will use the selected Qlassy light and dark themes at its next scheduled transition.
+
 ## Use
 
 Apply a theme in System Settings > Colors & Themes > Global Theme.
