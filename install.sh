@@ -14,14 +14,26 @@ readonly MARKER_FILE="$CONFIG_HOME/qlassy-theme/defenestrated-11-applied"
 
 apply_preset=false
 activate_variant=""
+system=false
+packageroot=""
 
 usage() {
-    printf 'Usage: %s [--apply-preset] [--activate light|dark]\n' "${0##*/}"
+    printf 'Usage: %s [--apply-preset] [--activate light|dark] [--system] [--packageroot DIR]\n' "${0##*/}"
 }
 
 while (($#)); do
     case "$1" in
         --apply-preset) apply_preset=true ;;
+        --system) system=true ;;
+        --packageroot)
+            if (($# < 2)); then
+                usage >&2
+                exit 2
+            fi
+            packageroot="$2"
+            system=true
+            shift
+            ;;
         --activate)
             if (($# < 2)); then
                 usage >&2
@@ -38,6 +50,18 @@ while (($#)); do
     esac
     shift
 done
+
+if [[ "$system" == true ]]; then
+    if [[ "$apply_preset" == true || -n "$activate_variant" ]]; then
+        printf '%s: --system cannot be combined with --apply-preset or --activate\n' "${0##*/}" >&2
+        exit 2
+    fi
+    : "${packageroot:=/usr/share/plasma/look-and-feel}"
+    if ! mkdir -p -- "$packageroot" 2>/dev/null || [[ ! -w "$packageroot" ]]; then
+        printf 'Package root not writable: %s (run as root)\n' "$packageroot" >&2
+        exit 1
+    fi
+fi
 
 data_dirs() {
     printf '%s\n' "${XDG_DATA_HOME:-$HOME/.local/share}"
@@ -106,13 +130,26 @@ install_package() {
     fi
 }
 
+install_package_files() {
+    local src="$1"
+    local id="$2"
+    local dest="$packageroot/$id"
+    rm -rf -- "$dest"
+    mkdir -p -- "$dest"
+    cp -r -- "$src/." "$dest/"
+}
+
 copy_previews() {
     local qlassy_id="$1"
     local klassy_id="$2"
     local preview_file fullscreen_file target_dir
     preview_file="$(find_data_file "plasma/look-and-feel/$klassy_id/contents/previews/preview.png")"
     fullscreen_file="$(find_data_file "plasma/look-and-feel/$klassy_id/contents/previews/fullscreenpreview.jpg")"
-    target_dir="$DATA_HOME/plasma/look-and-feel/$qlassy_id/contents/previews"
+    if [[ "$system" == true ]]; then
+        target_dir="$packageroot/$qlassy_id/contents/previews"
+    else
+        target_dir="$DATA_HOME/plasma/look-and-feel/$qlassy_id/contents/previews"
+    fi
 
     mkdir -p -- "$target_dir"
     cp --remove-destination "$preview_file" "$target_dir/preview.png"
@@ -180,12 +217,14 @@ apply_klassy_preset() {
     reload_kwin
 }
 
-require_command kpackagetool6
-require_command klassy-settings
-require_command kreadconfig6
-if [[ -n "$activate_variant" ]]; then
-    require_command kwriteconfig6
-    require_command plasma-apply-lookandfeel
+if [[ "$system" == false ]]; then
+    require_command kpackagetool6
+    require_command klassy-settings
+    require_command kreadconfig6
+    if [[ -n "$activate_variant" ]]; then
+        require_command kwriteconfig6
+        require_command plasma-apply-lookandfeel
+    fi
 fi
 require_data_file color-schemes/KlassyLight.colors
 require_data_file color-schemes/KlassyDark.colors
@@ -201,10 +240,20 @@ require_data_file icons/Qogir-Light/index.theme
 require_data_file icons/Qogir-Dark/index.theme
 require_klassy_decoration
 
-install_package "$ROOT_DIR/themes/dev.bsherman.qlassy.light" dev.bsherman.qlassy.light
-install_package "$ROOT_DIR/themes/dev.bsherman.qlassy.dark" dev.bsherman.qlassy.dark
+if [[ "$system" == true ]]; then
+    install_package_files "$ROOT_DIR/themes/dev.bsherman.qlassy.light" dev.bsherman.qlassy.light
+    install_package_files "$ROOT_DIR/themes/dev.bsherman.qlassy.dark" dev.bsherman.qlassy.dark
+else
+    install_package "$ROOT_DIR/themes/dev.bsherman.qlassy.light" dev.bsherman.qlassy.light
+    install_package "$ROOT_DIR/themes/dev.bsherman.qlassy.dark" dev.bsherman.qlassy.dark
+fi
 copy_previews dev.bsherman.qlassy.light org.kde.klassylightbottompanel.desktop
 copy_previews dev.bsherman.qlassy.dark org.kde.klassydarkbottompanel.desktop
+
+if [[ "$system" == true ]]; then
+    printf 'Installed Qlassy Light and Qlassy Dark into %s.\n' "$packageroot"
+    exit 0
+fi
 
 if [[ "$apply_preset" == true || ! -f "$MARKER_FILE" ]]; then
     apply_klassy_preset

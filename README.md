@@ -57,7 +57,30 @@ For automatic day/night switching, configure Plasma's light/dark global-theme se
 
 Plasma switches the color scheme, icons, application style, Plasma style, and Klassy decoration automatically. The desktop layout is only applied when explicitly selected from the Global Theme page.
 
-Plasma global themes cannot set arbitrary Klassy configuration. Qlassy applies the shared window-decoration preset at installation time, not on every light/dark switch.
+The border size and titlebar button layout are part of each theme, so Plasma also restores them on every switch. Plasma global themes cannot set arbitrary Klassy configuration, so the finer decoration styling (the contrast outline and `ColorizeWindowOutlineWithButton`) still comes from the one-time preset applied at installation, not on every light/dark switch.
+
+## Packaging / OS images
+
+To install both themes into a system prefix during an image build, run as root:
+
+```bash
+./install.sh --system
+```
+
+This copies the packages into `/usr/share/plasma/look-and-feel` (override with `--packageroot DIR`) and copies their previews from the installed Klassy themes. It skips every session-only step: no preset load, no `plasma-apply-lookandfeel`, no marker file. `kpackagetool6` and `klassy-settings` are not required in this mode, but the Klassy and Qogir data files still must be present. `--system` cannot be combined with `--apply-preset` or `--activate`.
+
+The border size and titlebar button layout ship in each theme's `contents/defaults`, so no `kwinrc` editing is needed at build time. To also default the finer `Defenestrated 11` Klassy styling for new accounts, capture `klassyrc` headlessly and install it into `/etc/skel`:
+
+```bash
+stage="$(mktemp -d)"
+env -i PATH="$PATH" HOME="$stage" \
+    XDG_CONFIG_HOME="$stage/.config" XDG_DATA_HOME="$stage/.local/share" \
+    XDG_CACHE_HOME="$stage/.cache" QT_QPA_PLATFORM=offscreen \
+    klassy-settings --load-windeco-preset "Defenestrated 11"
+install -Dm644 "$stage/.config/klassy/klassyrc" /etc/skel/.config/klassy/klassyrc
+```
+
+Do not ship the `~/.config/qlassy-theme/defenestrated-11-applied` marker in `/etc/skel`. With the layout in each theme, a later user run of `./install.sh` re-applies the preset idempotently, and a planted marker would only freeze an incomplete capture.
 
 ## Remove
 
