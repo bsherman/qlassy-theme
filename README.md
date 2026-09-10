@@ -2,6 +2,8 @@
 
 Qlassy is a pair of KDE Plasma 6 global themes built from Klassy's bottom-panel setup and Qogir icons.
 
+Qlassy is an opinionated wrapper, not an independent visual stack. It combines Klassy's Windows 11-inspired appearance with Qogir icons and depends on both projects being installed. It does not bundle, replace, or claim ownership of Klassy or Qogir.
+
 | Theme | Base | Icons |
 | --- | --- | --- |
 | Qlassy Light | Klassy Light - Bottom Panel | Qogir-Light |
