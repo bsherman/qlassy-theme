@@ -9,7 +9,7 @@ Qlassy is an opinionated wrapper, not an independent visual stack. It combines K
 | Qlassy Light | Klassy Light - Bottom Panel | Qogir-Light |
 | Qlassy Dark | Klassy Dark - Bottom Panel | Qogir-Dark |
 
-The first installation loads Klassy's `Defenestrated 11` window-decoration preset. It keeps the preset's 1 px contrast outline and disables `ColorizeWindowOutlineWithButton`.
+Each theme carries the `Defenestrated 11` border size and titlebar button layout in its `contents/defaults`, so Plasma restores them on every theme apply and day/night switch. The first installation additionally loads Klassy's `Defenestrated 11` window-decoration preset for the finer styling: it keeps the preset's 1 px contrast outline and disables `ColorizeWindowOutlineWithButton`.
 
 ## Prerequisites
 
