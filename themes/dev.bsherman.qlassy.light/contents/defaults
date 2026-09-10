@@ -16,6 +16,10 @@ LayoutName=org.kde.breeze.desktop
 [kwinrc][org.kde.kdecoration2]
 library=org.kde.klassy
 theme=Klassy
+BorderSizeAuto=false
+BorderSize=None
+ButtonsOnLeft=MFSE
+ButtonsOnRight=HIAX
 
 [plasmarc][Theme]
 name=klassy-light
