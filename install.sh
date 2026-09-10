@@ -228,8 +228,6 @@ if [[ "$system" == false ]]; then
 fi
 require_data_file color-schemes/KlassyLight.colors
 require_data_file color-schemes/KlassyDark.colors
-require_data_file plasma/desktoptheme/klassy-light/metadata.json
-require_data_file plasma/desktoptheme/klassy-dark/metadata.json
 require_data_file kstyle/themes/klassy.themerc
 require_data_file plasma/layout-templates/org.kde.klassy.plasma.desktop.bottomPanel/metadata.json
 require_data_file plasma/look-and-feel/org.kde.klassylightbottompanel.desktop/contents/previews/preview.png

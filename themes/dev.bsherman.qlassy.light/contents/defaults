@@ -1,5 +1,5 @@
 [kcminputrc][Mouse]
-cursorTheme=breeze_cursors
+cursorTheme=Qogir-Light
 
 [kdeglobals][General]
 ColorScheme=KlassyLight
@@ -22,4 +22,4 @@ ButtonsOnLeft=MFSE
 ButtonsOnRight=HIAX
 
 [plasmarc][Theme]
-name=klassy-light
+name=default

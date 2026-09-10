@@ -15,8 +15,8 @@ Each theme carries the `Defenestrated 11` border size and titlebar button layout
 
 Install Klassy and both Qogir icon variants before installing Qlassy. Qlassy checks for these required components:
 
-- Klassy application style, window decoration, color schemes, Plasma styles, and bottom-panel layout template
-- `Qogir-Light` and `Qogir-Dark`
+- Klassy application style, window decoration, color schemes, and bottom-panel layout template
+- `Qogir-Light` and `Qogir-Dark` (icons and matching cursors)
 - Plasma 6's `kpackagetool6`, `kreadconfig6`, and `klassy-settings`
 
 Qlassy does not install any of these dependencies.
@@ -55,7 +55,9 @@ For automatic day/night switching, configure Plasma's light/dark global-theme se
 - Light: `Qlassy Light`
 - Dark: `Qlassy Dark`
 
-Plasma switches the color scheme, icons, application style, Plasma style, and Klassy decoration automatically. The desktop layout is only applied when explicitly selected from the Global Theme page.
+Plasma switches the color scheme, icons, cursors, application style, and Klassy decoration automatically. The desktop layout is only applied when explicitly selected from the Global Theme page.
+
+Both themes use Plasma's stock Breeze Plasma style, which follows the active color scheme. Klassy's own `klassy-light` Plasma style ships a dark palette that makes "Automatic" dynamic wallpapers always pick their dark variant, so Qlassy does not use it.
 
 The border size and titlebar button layout are part of each theme, so Plasma also restores them on every switch. Plasma global themes cannot set arbitrary Klassy configuration, so the finer decoration styling (the contrast outline and `ColorizeWindowOutlineWithButton`) still comes from the one-time preset applied at installation, not on every light/dark switch.
 
