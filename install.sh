@@ -8,6 +8,7 @@ readonly PACKAGE_TYPE="Plasma/LookAndFeel"
 readonly PRESET_NAME="Defenestrated 11"
 ROOT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 readonly ROOT_DIR
+readonly DATA_HOME="${XDG_DATA_HOME:-$HOME/.local/share}"
 readonly CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 readonly MARKER_FILE="$CONFIG_HOME/qlassy-theme/defenestrated-11-applied"
 
@@ -93,6 +94,19 @@ install_package() {
     fi
 }
 
+copy_previews() {
+    local qlassy_id="$1"
+    local klassy_id="$2"
+    local preview_file fullscreen_file target_dir
+    preview_file="$(find_data_file "plasma/look-and-feel/$klassy_id/contents/previews/preview.png")"
+    fullscreen_file="$(find_data_file "plasma/look-and-feel/$klassy_id/contents/previews/fullscreenpreview.jpg")"
+    target_dir="$DATA_HOME/plasma/look-and-feel/$qlassy_id/contents/previews"
+
+    mkdir -p -- "$target_dir"
+    cp --remove-destination "$preview_file" "$target_dir/preview.png"
+    cp --remove-destination "$fullscreen_file" "$target_dir/fullscreenpreview.jpg"
+}
+
 verify_preset() {
     local config_file="$CONFIG_HOME/klassy/klassyrc"
     [[ "$(kreadconfig6 --file "$config_file" --group Windeco --key ColorizeWindowOutlineWithButton --default true)" == "false" ]] \
@@ -155,13 +169,18 @@ require_data_file plasma/desktoptheme/klassy-light/metadata.json
 require_data_file plasma/desktoptheme/klassy-dark/metadata.json
 require_data_file kstyle/themes/klassy.themerc
 require_data_file plasma/layout-templates/org.kde.klassy.plasma.desktop.bottomPanel/metadata.json
-require_data_file plasma/plasmoids/AndromedaLauncher/metadata.json
+require_data_file plasma/look-and-feel/org.kde.klassylightbottompanel.desktop/contents/previews/preview.png
+require_data_file plasma/look-and-feel/org.kde.klassylightbottompanel.desktop/contents/previews/fullscreenpreview.jpg
+require_data_file plasma/look-and-feel/org.kde.klassydarkbottompanel.desktop/contents/previews/preview.png
+require_data_file plasma/look-and-feel/org.kde.klassydarkbottompanel.desktop/contents/previews/fullscreenpreview.jpg
 require_data_file icons/Qogir-Light/index.theme
 require_data_file icons/Qogir-Dark/index.theme
 require_klassy_decoration
 
 install_package "$ROOT_DIR/themes/dev.bsherman.qlassy.light" dev.bsherman.qlassy.light
 install_package "$ROOT_DIR/themes/dev.bsherman.qlassy.dark" dev.bsherman.qlassy.dark
+copy_previews dev.bsherman.qlassy.light org.kde.klassylightbottompanel.desktop
+copy_previews dev.bsherman.qlassy.dark org.kde.klassydarkbottompanel.desktop
 
 if [[ "$apply_preset" == true || ! -f "$MARKER_FILE" ]]; then
     apply_klassy_preset

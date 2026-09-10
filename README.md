@@ -14,7 +14,6 @@ The first installation loads Klassy's `Defenestrated 11` window-decoration prese
 Install Klassy and both Qogir icon variants before installing Qlassy. Qlassy checks for these required components:
 
 - Klassy application style, window decoration, color schemes, Plasma styles, and bottom-panel layout template
-- Andromeda Launcher (`AndromedaLauncher`)
 - `Qogir-Light` and `Qogir-Dark`
 - Plasma 6's `kpackagetool6`, `kreadconfig6`, and `klassy-settings`
 
@@ -26,7 +25,7 @@ Qlassy does not install any of these dependencies.
 ./install.sh
 ```
 
-Installation registers both themes but does not activate either one or change Plasma's day/night schedule.
+Installation registers both themes, copies their previews from the matching installed Klassy theme, and does not activate either one or change Plasma's day/night schedule. Qlassy does not store preview assets in its repository.
 
 Later runs preserve your Klassy customization. To deliberately restore the Qlassy Klassy preset, run:
 
@@ -38,7 +37,7 @@ Later runs preserve your Klassy customization. To deliberately restore the Qlass
 
 Apply a theme in System Settings > Colors & Themes > Global Theme.
 
-For the Qlassy bottom-panel layout, apply one Qlassy theme from the Global Theme page and include its desktop layout. This creates the panel through Klassy's `org.kde.klassy.plasma.desktop.bottomPanel` template, replaces Kickoff with Andromeda Launcher, resets the launcher to its default `start-here-kde-symbolic` icon, and enables battery percentage display. It does not change screen-edge actions.
+For the Qlassy bottom-panel layout, apply one Qlassy theme from the Global Theme page and include its desktop layout. This creates the panel through Klassy's `org.kde.klassy.plasma.desktop.bottomPanel` template and enables battery percentage display. It does not change screen-edge actions.
 
 For automatic day/night switching, configure Plasma's light/dark global-theme setting with:
 
@@ -61,4 +60,4 @@ Removal leaves Klassy, Qogir, and your Klassy configuration untouched.
 
 ## License and credits
 
-Qlassy is licensed under LGPL-2.1-or-later. Its layout depends on Klassy's LGPL-licensed bottom-panel template. Klassy is created by Paul A McAuley. Qogir icons and Andromeda Launcher are separate, required dependencies and remain subject to their upstream licenses.
+Qlassy is licensed under LGPL-2.1-or-later. Its layout depends on [Klassy](https://github.com/paulmcauley/klassy), created by Paul A McAuley and licensed under LGPL. [Qogir Icon Theme](https://github.com/vinceliuice/Qogir-icon-theme/) is a separate required dependency and remains subject to its upstream license.
